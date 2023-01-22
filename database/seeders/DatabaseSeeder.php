@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,8 +23,10 @@ class DatabaseSeeder extends Seeder
 
         foreach (range(1,20) as $index)
         {
-            DB::table('tags')->insert([
+            DB::table('products')->insert([
                 'name'=>$faker->name,
+                'price' =>Str::random(3),
+                'category_id' =>Str::random(2)
             ]);
         }
     }

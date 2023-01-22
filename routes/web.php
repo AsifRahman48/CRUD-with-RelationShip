@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\WinnerListController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EloquentMethodController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +32,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('products',ProductController::class);
+
+
+    Route::resource('winner-list',WinnerListController::class);
 });
+
+Route::resource('categories',CategoryController::class)->only(['index']);
+Route::get('method',[EloquentMethodController::class,'index'])->name('method');
+
 
 require __DIR__.'/auth.php';
