@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -187,7 +188,91 @@ class EloquentMethodController extends Controller
         $last= Product::get()->last();
       $last= Product::pluck('price')->last();
       $last= Product::get('price')->last();
-      dd($last);
+     // dd($last);
+
+        //groupBy
+        $groupBy=Product::groupBy('name')->get();
+      //  dd($groupBy);
+        $groupBy=Product::get()->groupBy('name');
+        $groupBy=Product::groupBy('name')->get()->count();
+        $groupBy=Product::groupBy('name')->get()->sum('price');
+      //  dd($groupBy);
+
+        //filter
+       // $filter=Product::filter(['price'=>'>',500])->get();
+       // dd($filter);
+
+        //first
+        $first=Product::first();
+      //  dd($first);
+        $first=Product::where('category_id','>',10)->first();
+        $first=Product::where('category_id','>',10)->first('name');
+        $first=Product::where('category_id','>',10)->orderBy('name')->first();
+      //  dd($first);
+
+        //firstOrFail
+        $first=Product::where('category_id','>',0)->firstOrFail();
+       // dd($first);
+
+        //firstWhere
+        $firstWhere=Product::firstWhere('price','>',500);
+        $firstWhere=Product::firstWhere(['price'=>935,'category_id'=>3]);
+      //  dd($firstWhere);
+
+        $category=Product::groupBy('category_id')->get()->count();
+        //dd($category);
+
+        //has
+        $has=Category::has('products')->get();
+       // dd($has);
+
+        //isEmpty
+        $isEmpty=Product::get();
+        if ($isEmpty->isEmpty()){
+            echo "No product found";
+        }
+        else{
+            //dd($isEmpty);
+        }
+
+        //isNotEmpty
+        $isEmpty=Product::get();
+        if ($isEmpty->isNotEmpty()){
+            echo "No product found";
+        }
+        else{
+           // dd($isEmpty);
+        }
+    //when
+    $when=Product::when(!empty('name'),function ($query){
+        return $query->where('category_id',3);
+    })->get();
+      //  dd($when);
+
+        //whereBetween
+        $whereBetween=Product::whereBetween('price',[500,600])->get();
+        $whereBetween=Product::whereBetween('price',[500,600])->orwhereBetween('category_id',[15,20])->get();
+       // dd($whereBetween);
+
+        //unique
+      //  $unique=Product::unique('name')->get(); //not working
+        $unique=Product::get()->unique('name');
+        $unique=Product::get()->unique('price');
+        $unique=Product::get();
+      $uni=  $unique->unique(function ($query){
+            return $query->name;
+        });
+        //dd($uni);
+
+        //latest
+        $latest=Product::latest()->get();  //sort by created_at
+        $latest=Product::latest('name')->get();
+       // dd($latest);
+
+        //oldest
+        $oldest=Product::oldest()->get();  //sort by created_at
+        $oldest=Product::oldest('name')->get();
+       // dd($oldest);
 
     }
 }
