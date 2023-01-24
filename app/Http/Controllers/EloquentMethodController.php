@@ -34,24 +34,7 @@ class EloquentMethodController extends Controller
             echo $list->name." , ";
         }
 
-        //pluck
-        $pluck=Product::pluck('price');
-        $pluck=Product::pluck('price')->count();
-        $pluck=Product::pluck('price')->sum();
-        $pluck=Product::where('price','>',1000)->pluck('price');
 
-        foreach ($pluck as $list){
-            echo $list." ,";
-        }
-
-        $pluck=Product::pluck('price','name');
-       // $pluck=Product::pluck('price','id');
-
-        foreach ($pluck as $key=>$item){
-          //  dd($key);
-          //  dd($item);
-        }
-       // dd($pluck);
 
         //average
         $avg=Product::pluck('price')->avg();
@@ -190,6 +173,9 @@ class EloquentMethodController extends Controller
       $last= Product::get('price')->last();
      // dd($last);
 
+
+        //23/01/2023
+
         //groupBy
         $groupBy=Product::groupBy('name')->get();
       //  dd($groupBy);
@@ -225,6 +211,25 @@ class EloquentMethodController extends Controller
         //has
         $has=Category::has('products')->get();
        // dd($has);
+
+        //pluck
+        $pluck=Product::pluck('price');
+        $pluck=Product::pluck('price')->count();
+        $pluck=Product::pluck('price')->sum();
+        $pluck=Product::where('price','>',1000)->pluck('price');
+
+        foreach ($pluck as $list){
+            echo $list." ,";
+        }
+
+        $pluck=Product::pluck('price','name');
+        // $pluck=Product::pluck('price','id');
+
+        foreach ($pluck as $key=>$item){
+            //  dd($key);
+            //  dd($item);
+        }
+        // dd($pluck);
 
         //isEmpty
         $isEmpty=Product::get();
