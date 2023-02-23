@@ -27,6 +27,12 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
+                <strong>Quantity:</strong>
+                {{ $product->qty }}
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
                 <strong>Image:</strong>
                 @foreach($product->images as $image)
                     <img src="{{ asset($image->image_url) }}" width='70px' height='70px'  />

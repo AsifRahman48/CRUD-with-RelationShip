@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\WinnerListController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EloquentMethodController;
+use App\Http\Controllers\InvoiceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,24 +22,42 @@ use App\Http\Controllers\EloquentMethodController;
 Route::get('/', function () {
     return view('welcome');
 });
+/*Route::get('/ecommerce', function () {
+    return view('ecommerce.product');
+});*/
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/c', function () {
+    return view('practice_css');
+});
+
+Route::get('/b', function () {
+    return view('practice_bootstrap');
+});
+
+Route::get('/dashboard',[ProductController::class,'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('products',ProductController::class);
 
 
     Route::resource('winner-list',WinnerListController::class);
 });
 
-Route::resource('categories',CategoryController::class)->only(['index']);
+Route::get('/ecommerce',[ProductController::class,'product'])->name('ecommerce');
+Route::get('/cart',[ProductController::class,'cart'])->name('cart');
+Route::post('/add-cart/{id}',[ProductController::class,'addCart'])->name('addCart');
+Route::get('/cart-show/{id}',[ProductController::class,'cart_show'])->name('cart_show');
+Route::post('/',[ProductController::class,'cart_store'])->name('cart.store');
+Route::delete('/{id}',[ProductController::class,'cartDelete'])->name('cartDelete');
+
+
+Route::resource('products',ProductController::class);
+Route::resource('categories',CategoryController::class);
 Route::get('method',[EloquentMethodController::class,'index'])->name('method');
+Route::resource('invoice',InvoiceController::class);
 
 
 require __DIR__.'/auth.php';

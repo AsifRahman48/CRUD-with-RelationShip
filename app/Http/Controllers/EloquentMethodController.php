@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EloquentMethodController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $product=Product::all(); //retrieve all value
         $product=Product::all('price'); //retrieve only all price
         $product=Product::all(['price','name']); //retrieve all price and name
@@ -278,6 +279,54 @@ class EloquentMethodController extends Controller
         $oldest=Product::oldest()->get();  //sort by created_at
         $oldest=Product::oldest('name')->get();
        // dd($oldest);
+
+
+        // 24/01/2023
+
+        //sortBy
+        $sortBy=Product::get()->sortBy('price')->count();
+        $sortBy=Product::get()->sortBy('price');
+        $sortBy=Product::get()->sortBy(['price','name']);
+       // dd($sortBy);
+
+        //sortByDesc
+      //  $sortByDesc=Product::get('name')->sortByDesc(); //not Working
+        $sortByDesc=Product::get()->sortByDesc('name');
+        $sortByDesc=Product::pluck('price')->sortByDesc('price'); //not working
+        $sortByDesc=Product::get('price')->sortByDesc('price'); //not working
+       // dd($sortByDesc);
+
+        //sortByAsc Same by sortByDesc
+
+        //put
+       /* $put=$request->put('name','asif');
+        dd($put);*/
+
+        //only
+      //  $only=Product::get()->only('name'); //not working
+        $only=Product::all()->only('name'); //not working
+        $only=Product::first()->only('name'); //not working
+      //  dd($only);
+
+        //value retrieve only first  value
+      //  $value=Product::pluck('name')->value(); //not working
+        $value=Product::get()->value(['price','name']); //not working
+        $value=Product::get()->value('price');
+        $value=Product::first()->value('name');
+       // dd($value);
+
+        //random after reloading page change the product
+        $random=Product::get()->random();
+        $random=Product::get()->random(3);  //retrieve 3 data
+        $random=Product::get('price')->random(3);  //retrieve 3 data
+       // dd($random);
+
+        //join
+        $join=DB::table('products')
+            ->join('categories','products.category_id','=','categories.id')
+            ->select('products.*','categories.name')
+            ->get();
+        dd($join);
 
     }
 }

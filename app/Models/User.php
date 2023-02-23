@@ -15,14 +15,10 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use SoftDeletes, HasApiTokens;
+    use HasApiTokens;
     use Notifiable;
     use HasFactory;
 
-    public const STATUS_RADIO = [
-        '1' => 'Active',
-        '0' => 'Inactive',
-    ];
 
     public $table = 'users';
 
@@ -40,18 +36,13 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name',
-        'username',
         'email',
-        'mobile',
         'email_verified_at',
         'device_token',
         'password',
         'remember_token',
-        'outlet_id',
-        'status',
         'created_at',
         'updated_at',
-        'deleted_at',
     ];
 
     public function getIsAdminAttribute()

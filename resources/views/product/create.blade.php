@@ -28,8 +28,16 @@
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Product Price:</strong>
-                    <input type="number" name="price" class="form-control" placeholder="Product Name" step="0.01" required>
+                    <input type="number" name="price" class="form-control" placeholder="Product Price" step="0.01" required>
                     @error('price')
+                    <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                    @enderror
+                </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="form-group">
+                    <strong>Product Quantity:</strong>
+                    <input type="number" name="qty" class="form-control" placeholder="Product Quantity" required>
+                    @error('qty')
                     <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -37,7 +45,7 @@
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     <strong>Image:</strong>
-                    <input type="file" name="image[]" class="form-control" placeholder=" Image" multiple>
+                    <input type="file" name="image" class="form-control" placeholder=" Image">
                 </div>
             </div>
             {{--<div class="col-xs-12 col-sm-12 col-md-12">

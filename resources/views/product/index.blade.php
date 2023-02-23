@@ -18,7 +18,7 @@
             <tr>
                 <th>Name</th>
                 <th>Price</th>
-                <th>Tag Name</th>
+                <th>Quantity</th>
                 <th>Image</th>
                 <th>Action</th>
             </tr>
@@ -28,14 +28,15 @@
             <tr>
                 <td>{{ $list->name }}</td>
                 <td>{{ $list->price }}</td>
-                <td>
+                <td>{{ $list->qty }}</td>
+                {{--<td>
                     @php
                     $count=count($list->tags)
                     @endphp
                 @foreach($list->tags as $tag)
                 {{$tag->name ?? ''}}{{$loop->iteration<$count?",":""}}
                 @endforeach
-                </td>
+                </td>--}}
                 <td>
                     @foreach($list->images as $image)
                         <img src="{{ asset($image->image_url) }}" width='70px' height='70px'  />

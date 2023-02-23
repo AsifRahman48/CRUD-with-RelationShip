@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Traits\image;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
+    use image;
+
     public function index(Request $request)
     {
         /*$category=Category::with('products')->get();*/
@@ -26,6 +30,23 @@ class CategoryController extends Controller
                 ->get();
 
             $table= Datatables::of($data);
+
+            $table->addColumn('actions', '&nbsp;');
+
+            $table->editColumn('actions', function ($row) {
+                $viewGate = 'discount_sponsor_show';
+                $editGate = 'discount_sponsor_edit';
+                $deleteGate = 'discount_sponsor_delete';
+                $crudRoutePart = 'categories';
+
+                return view('category.datatablesActions', compact(
+                    'viewGate',
+                    'editGate',
+                    'deleteGate',
+                    'crudRoutePart',
+                    'row'
+                ));
+            });
 
             $table->editColumn('id', function ($row) {
                     return $row->id ?? '';
@@ -53,7 +74,11 @@ class CategoryController extends Controller
                 return $price ? $price : '';
             });
 
-            $table->rawColumns(['products']);
+            $table->editColumn('image', function ($row) {
+                return view('category.image', compact('row'));
+            });
+
+            $table->rawColumns(['actions','products']);
             return  $table->make(true);
         }
         $category=Category::get();
@@ -63,29 +88,58 @@ class CategoryController extends Controller
 
     public function create()
     {
-        //
+        return view('category.create');
     }
 
     public function store(Request $request)
     {
-        //
+        $category=Category::create([
+            //  'image' => $path,
+              'name' => $request->name,
+          ]);
+
+        $path = $this->singleFileUpload($request->image, 'category');
+        $category->image=$path;
+
+      $category->save();
+      
+
+        return redirect()->route('categories.index')->with(['message' => 'Create Successfully']);
     }
 
     public function show($id)
     {
         //
     }
-    public function edit($id)
+    public function edit(Category $category)
     {
-        //
+        return view('category.edit',compact('category'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $category->update([
+             'name' => $request->name,
+         ]);
+
+        if ($request->hasFile('image')) {
+            $request->image = $this->singleFileUpload($request->image, "category", $category->image);
+        }
+
+        $category->image=$request->image ?? $category->image;
+
+        $category->save();
+
+        return redirect()->route('categories.index')->with(['message' => 'Successfully Updated.']);
+    
     }
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        if (!is_null($category->image)) {
+            $this->deleteFile($category->image);
+        }
+        $category->delete();
+
+        return redirect()->route('categories.index')->with(['message' => 'Successfully deleted.']);
     }
 }

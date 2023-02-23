@@ -51,6 +51,15 @@
 
 <div class="container">
     <h1>Category List</h1>
+
+    <div style="margin-bottom: 10px;" class="row">
+            <div class="col-lg-12">
+                <a class="btn btn-success" href="{{ route('categories.create') }}">
+                    Add Category
+                </a>
+            </div>
+        </div>
+
     <table class="table table-bordered data-table">
         <thead>
         <tr>
@@ -59,34 +68,12 @@
             <th>Product</th>
             <th>Count</th>
             <th>Price</th>
+            <th>Image</th>
+            <th>Action</th>
         </tr>
         </thead>
 
         <tbody>
-       {{-- @foreach($category as $list)
-        <tr>
-            <td>{{$list->name}}</td>
-            <td>
-                @php
-                    $count=count($list->products)
-                @endphp
-            @foreach($list->products as $product)
-            {{$product->name}}{{ $loop->iteration < $count ? "," : " "}}
-            @endforeach
-            </td>
-            <td>
-                @php
-                    $sum=0;
-                @endphp
-                @foreach($list->products as $product)
-                    @php
-                        $sum +=$product->price;
-                    @endphp
-                @endforeach
-                {{ $sum}}
-            </td>
-        </tr>
-        @endforeach--}}
         </tbody>
     </table>
 </div>
@@ -113,6 +100,8 @@
                 {data: 'product'},
                 {data: 'count'},
                 {data: 'price'},
+                {data: 'image'},
+                {data: 'actions', name: '{{ trans('global.actions') }}'}
             ]
         };
         let table = $('.data-table').DataTable(dtOverrideGlobals);

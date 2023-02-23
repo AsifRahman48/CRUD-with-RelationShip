@@ -31,8 +31,14 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
+                        <strong>Product Quantity:</strong>
+                        <input type="text" name="qty" value="{{ $product->qty }}" class="form-control" placeholder="Product Quantity">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
                         <strong>Product Image:</strong>
-                        <input type="file" name="image[]" value="" class="form-control" multiple>
+                        <input type="file" name="image" value="" class="form-control">
                         @foreach($product->images as $image)
                             <img src="{{ asset($image->image_url) }}" width='70px' height='70px'  />
                         @endforeach
