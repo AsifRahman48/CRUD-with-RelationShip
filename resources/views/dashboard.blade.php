@@ -25,8 +25,8 @@
                                                     @csrf
                                                     <input type="submit" class=" aa-add-card-btn" value="Add to Cart">
 
-                                                 <input type="number" value="1" min="1" class="form-control"
-                                                           style="width: 100px;" name="qty">
+                                                {{-- <input type="number" value="1" min="1" class="form-control"
+                                                           style="width: 100px;" name="qty">--}}
 
                                                 </form>
                                             </div>

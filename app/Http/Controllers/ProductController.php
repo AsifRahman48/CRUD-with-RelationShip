@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\Console\Input\Input;
 
 class ProductController extends Controller
 {
@@ -71,15 +72,13 @@ class ProductController extends Controller
         return Product::where('name', 'like', '%' . $value . '%')->orWhere('price', 'like', '%' . $value . '%')->get();
     }*/
 
-    public function cart_store(Request $request){
+    /*public function cartUpdate(Request $request,$id){
+        $cart=Cart::find($id);
+        $cart->qty=$request->qty;
 
-      //  echo 'hi';
-        $product=Product::with('images')->findOrFail($request->input('product_id'));
-       // dd($product);
-        Cart::add($product->id,$product->name,$product->qty,$product->price,90);
-
+        $cart->save();
         return redirect()->route('cart');
-    }
+    }*/
 
     public function cart()
     {
@@ -100,7 +99,7 @@ class ProductController extends Controller
             $cart->name=$user->name;
             $cart->product_name=$product->name;
             $cart->price=$product->price;
-            $cart->qty=$request->qty;
+            $cart->qty=$product->qty;
             foreach ($product->images as $image){
                $cart->image=$image->image_url;
             }
@@ -139,12 +138,40 @@ class ProductController extends Controller
         return view('ecommerce.product', compact('product','count'));
     }
 
+    public function cartUpdate(Request $request){
 
-    public function cartDelete($id){
-       $cart= Cart::find($id);
-       $cart->delete();
+        // dd($request->all());
+        $qty = $request->input('qty');
 
-       return redirect()->route('cart');
+        foreach ($qty as $key=>$item){
+            // dd($key);
+            $data=Cart::find($key);
+            $data->qty=$item;
+            $data->save();
+        }
+
+        return response()->json(['message' => 'Data updated successfully.']);
+
+//        dd($request->qty);
+
+        /*$cart=Cart::find($id);
+        $cart->qty=$request['qty'];
+
+        $cart->save();
+        return response()->json('updated');*/
+    }
+
+    public function cartDelete(Request $request){
+
+        $productId = $request->input('id');
+        $product = Cart::find($productId);
+        $product->delete();
+        return response()->json(['message' => 'Data Delete successfully.']);
+
+       /*$cart= Cart::find($id);
+       $cart->delete();*/
+
+       // return redirect()->route('cart');
     }
 
     public function index(Request $request)

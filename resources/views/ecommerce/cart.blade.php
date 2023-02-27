@@ -19,8 +19,8 @@
                 <div class="col-md-12">
                     <div class="cart-view-area">
                         <div class="cart-view-table">
-                            <form action="">
-                                <div class="table-responsive">
+                            <div class="table-responsive">
+                                <form id="update-cart-form">
                                     <table class="table">
                                         <thead>
                                         <tr>
@@ -36,37 +36,117 @@
                                         @foreach($product as $list)
                                             <tr>
                                                 <td>
-                                                    <form action="{{ route('cartDelete',$list->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit">
-                                                            <a class="remove" >
-                                                                <fa class="fa fa-close"></fa>
-                                                            </a>
-                                                        </button>
-                                                    </form>
+                                                    <button class="delete-product-btn"
+                                                            data-product-id="{{ $list->id }}">
+                                                        <a class="remove">
+                                                            <fa class="fa fa-close"></fa>
+                                                        </a>
+                                                    </button>
                                                 </td>
                                                 <td><img src="{{ asset($list->image) }}"/></td>
                                                 <td>{{ $list->product_name }}</td>
                                                 <td>{{ $list->price }}TK</td>
-                                                <td> {{ $list->qty }}{{--<input class="aa-cart-quantity" type="number" name="qty" id="qty"  value="{{ $list->qty }}"
-                                   onchange="updateqty({{ $list->price }})">--}}</td>
-                                                <td id="total_price">{{$list->price * $list->qty}}TK</td>
+                                                <td>
+                                                    <input class="aa-cart-quantity qty" type="number"
+                                                           name="qty[{{$list->id}}]"
+                                                           id="qty{{ $list->id }}" value="{{ $list->qty }}"
+                                                           onchange="updatetotal({{ $list->id }},{{ $list->price }})">
+                                                </td>
+                                                <td id="total_price_{{ $list->id }}">{{$list->price * $list->qty}}TK
+                                                </td>
                                             </tr>
                                         @endforeach
                                         </tbody>
                                     </table>
-                                </div>
-                            </form>
+                                    <button class="btn btn-primary" type="submit" id="button" onclick="updateqty()">
+                                        Update
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="text-right">
+                                <button class="btn btn-danger"><a href="{{ route('payment') }}">Order now</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
 @endsection
 
-{{--@section('script')
+@section('script')
     <script>
-        function updateqty(price){
-            var qty=jQuery('#qty').val();
-            jQuery('#qty').val(qty);
-            jQuery('#total_price').html(qty*price+'TK');
+        function updatetotal(id, price) {
+            var qty = $('#qty' + id).val();
+            $('#qty').val(qty);
+            $('#total_price_' + id).html(qty * price + 'TK');
         }
+
+        function updateqty() {
+            $('#update-cart-form').submit(function (e) {
+                e.preventDefault();
+                var qty = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('cartUpdate') }}",
+                    type: "POST",
+                    data: qty,
+                    dataType: "json",
+                    success: function (response) {
+                        alert(response.message);
+                    },
+                });
+            });
+        }
+
+        $('.delete-product-btn').on('click', function (event) {
+            event.preventDefault();
+
+            var productId = $(this).data('product-id');
+
+            $.ajax({
+                url: '{{ route('cartDelete') }}',
+                type: 'POST',
+                data: {id: productId},
+                success: function (response) {
+                    alert(response.message);
+                },
+            });
+        });
+
+
+        {{--$(document).ready(function () {--}}
+        {{--    $('#update-cart-form').on('submit', function (e) {--}}
+        {{--        e.preventDefault();--}}
+        {{--        var formData = $(this).serialize();--}}
+        {{--        $.ajax({--}}
+        {{--            url: "{{ route('cartUpdate') }}",--}}
+        {{--            type: "POST",--}}
+        {{--            data: formData,--}}
+        {{--            dataType: "json",--}}
+        {{--            success: function (response) {--}}
+        {{--                alert(response.message);--}}
+        {{--            },--}}
+        {{--            error: function (xhr, status, error) {--}}
+        {{--                console.log(xhr.responseText);--}}
+        {{--            }--}}
+        {{--        });--}}
+        {{--    });--}}
+        {{--});--}}
+
+
+        /*function updateQuantity(id){
+            var quantity=$('#qty'+id).val();
+            $.ajax({
+                url:'cart-update/'+id,
+                type: 'PUT',
+                data: {
+                    qty:quantity,
+                },
+                success: function (response){
+                    alert(response);
+                }
+            })
+        }*/
     </script>
-@endsection--}}
+@endsection
