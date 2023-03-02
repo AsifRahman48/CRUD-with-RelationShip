@@ -161,17 +161,17 @@ class ProductController extends Controller
         return response()->json('updated');*/
     }
 
-    public function cartDelete(Request $request){
+    public function cartDelete($id){
 
-        $productId = $request->input('id');
+        /*$productId = $request->input('id');
         $product = Cart::find($productId);
         $product->delete();
+        return response()->json(['message' => 'Data Delete successfully.']);*/
+
+       $cart= Cart::find($id);
+       $cart->delete();
+
         return response()->json(['message' => 'Data Delete successfully.']);
-
-       /*$cart= Cart::find($id);
-       $cart->delete();*/
-
-       // return redirect()->route('cart');
     }
 
     public function index(Request $request)

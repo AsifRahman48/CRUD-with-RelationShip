@@ -20,7 +20,7 @@
                     <div class="cart-view-area">
                         <div class="cart-view-table">
                             <div class="table-responsive">
-                                <form id="update-cart-form">
+                                <form id="update-cart-form" method="get">
                                     <table class="table">
                                         <thead>
                                         <tr>
@@ -36,8 +36,7 @@
                                         @foreach($product as $list)
                                             <tr>
                                                 <td>
-                                                    <button class="delete-product-btn"
-                                                            data-product-id="{{ $list->id }}">
+                                                    <button class="delete-product-btn" onclick="deleteProduct({{ $list->id }})">
                                                         <a class="remove">
                                                             <fa class="fa fa-close"></fa>
                                                         </a>
@@ -52,7 +51,7 @@
                                                            id="qty{{ $list->id }}" value="{{ $list->qty }}"
                                                            onchange="updatetotal({{ $list->id }},{{ $list->price }})">
                                                 </td>
-                                                <td id="total_price_{{ $list->id }}">{{$list->price * $list->qty}}TK
+                                                <td id="total_price_{{ $list->id }}" class="total_price">{{$list->price * $list->qty}}TK
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -63,6 +62,44 @@
                                     </button>
                                 </form>
                             </div>
+
+                            <div class="row">
+                                <div class="col-md-7">
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="table-responsive">
+                                        <table class="table table-borderless">
+                                            <tbody>
+                                            <tr>
+                                                <td class="text-left">
+                                                    <strong>Total</strong>
+                                                </td>
+                                                <td class="text-right grand_total">
+                                                    <input type="hidden" class="total_amount" value="">
+                                                    <span class="single_amount "><span class="total_amount1">
+                                                            @php $result = 0;
+                                                            foreach($product as $item)
+                                                                $result +=($item->price * $item->qty)
+                                                                @endphp
+                                                            {{ $result }}
+                                                        </span> Taka</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control cus_phone" name="" value="" placeholder="Mobile Number">
+                                    </div>
+                                    <button class="btn btn-primary btn-lg btn-block" id="sslczPayBtn"
+                                            token="if you have any token validation"
+                                            postdata="your javascript arrays or objects which requires in backend"
+                                            order="If you already have the transaction generated for current order"
+                                            endpoint="{{ url('/pay-via-ajax') }}"> Pay Now
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="text-right">
                                 <button class="btn btn-danger"><a href="{{ route('payment') }}">Order now</a></button>
                             </div>
@@ -76,7 +113,11 @@
 @endsection
 
 @section('script')
+
     <script>
+
+
+
         function updatetotal(id, price) {
             var qty = $('#qty' + id).val();
             $('#qty').val(qty);
@@ -99,20 +140,32 @@
             });
         }
 
-        $('.delete-product-btn').on('click', function (event) {
+        function deleteProduct(id) {
+            if (confirm('Are you Sure?')) {
+                $.ajax({
+                    url: 'cart/'+id,
+                    type: 'delete',
+                    success: function (response){
+                        alert(response.message);
+                    }
+                });
+            }
+        }
+
+        /*$('.delete-product-btn').on('click', function (event) {
             event.preventDefault();
 
             var productId = $(this).data('product-id');
 
             $.ajax({
-                url: '{{ route('cartDelete') }}',
+                url: '',
                 type: 'POST',
                 data: {id: productId},
                 success: function (response) {
                     alert(response.message);
                 },
             });
-        });
+        });*/
 
 
         {{--$(document).ready(function () {--}}
