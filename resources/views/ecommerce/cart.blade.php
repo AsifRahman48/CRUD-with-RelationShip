@@ -75,8 +75,8 @@
                                                     <strong>Total</strong>
                                                 </td>
                                                 <td class="text-right grand_total">
-                                                    <input type="hidden" class="total_amount" value="">
-                                                    <span class="single_amount "><span class="total_amount1">
+                                                    <input type="hidden" class="total_amount" value="" name="amount">
+                                                    <span class="single_amount "><span class="total_amount1" id="total_amount">
                                                             @php $result = 0;
                                                             foreach($product as $item)
                                                                 $result +=($item->price * $item->qty)
@@ -89,7 +89,7 @@
                                         </table>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control cus_phone" name="" value="" placeholder="Mobile Number">
+                                        <input type="text" class="form-control cus_phone" name="mobile" value="" placeholder="Mobile Number">
                                     </div>
                                     <button class="btn btn-primary btn-lg btn-block" id="sslczPayBtn"
                                             token="if you have any token validation"
@@ -100,9 +100,9 @@
                                 </div>
                             </div>
 
-                            <div class="text-right">
+                            {{--<div class="text-right">
                                 <button class="btn btn-danger"><a href="{{ route('payment') }}">Order now</a></button>
-                            </div>
+                            </div>--}}
                         </div>
                     </div>
                 </div>
@@ -116,6 +116,11 @@
 
     <script>
 
+        var obj = {};
+        obj.total_amount=$('#total_amount').val();
+        obj.cus_phone=$('#mobile').val();
+
+        $('#sslczPayBtn').prop('postdata', obj);
 
 
         function updatetotal(id, price) {

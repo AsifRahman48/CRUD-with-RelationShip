@@ -44,15 +44,13 @@
                 <span class="badge badge-secondary badge-pill">3</span>
             </h4>
             <ul class="list-group mb-3">
-                @foreach($cart as $list)
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                         <h6 class="my-0">Product name</h6>
-                        <small class="text-muted">{{ $list->product_name }}</small>
+                        <small class="text-muted"></small>
                     </div>
-                    <span class="text-muted">{{ $list->price }}</span>
+                    <span class="text-muted"></span>
                 </li>
-                @endforeach
                 <li class="list-group-item d-flex justify-content-between">
                     <span>Total (BDT)</span>
                     <strong>1200 TK</strong>
@@ -66,7 +64,7 @@
                     <div class="col-md-12 mb-3">
                         <label for="firstName">Full name</label>
                         <input type="text" name="customer_name" class="form-control" id="customer_name" placeholder=""
-                               value="{{$user->name}}" required>
+                               value="" required>
                         <div class="invalid-feedback">
                             Valid customer name is required.
                         </div>
@@ -206,8 +204,7 @@
     (function (window, document) {
         var loader = function () {
             var script = document.createElement("script"), tag = document.getElementsByTagName("script")[0];
-            // script.src = "https://seamless-epay.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7); // USE THIS FOR LIVE
-            script.src = "https://sandbox.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7); // USE THIS FOR SANDBOX
+            script.src = "https://sandbox.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7);
             tag.parentNode.insertBefore(script, tag);
         };
 
