@@ -75,28 +75,31 @@
                                                     <strong>Total</strong>
                                                 </td>
                                                 <td class="text-right grand_total">
-                                                    <input type="hidden" class="total_amount" value="" name="amount">
-                                                    <span class="single_amount "><span class="total_amount1" id="total_amount">
+                                                    <span class="single_amount "><span class="total_amount1" >
                                                             @php $result = 0;
                                                             foreach($product as $item)
                                                                 $result +=($item->price * $item->qty)
                                                                 @endphp
                                                             {{ $result }}
                                                         </span> Taka</span>
+                                                    <input type="hidden" class="total_amount" value=" {{ $result }}" name="amount" id="total_amount">
                                                 </td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </div>
+                                    <form method="post" action="{{ url('/pay-via-ajax') }}">
+                                        @csrf
                                     <div class="form-group">
-                                        <input type="text" class="form-control cus_phone" name="mobile" value="" placeholder="Mobile Number">
+                                        <input type="text" class="form-control cus_phone" name="mobile" id="mobile" value="" placeholder="Mobile Number" oninput="myFunction()">
                                     </div>
-                                    <button class="btn btn-primary btn-lg btn-block" id="sslczPayBtn"
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block" id="sslczPayBtn"
                                             token="if you have any token validation"
-                                            postdata="your javascript arrays or objects which requires in backend"
+                                            postdata=""
                                             order="If you already have the transaction generated for current order"
-                                            endpoint="{{ url('/pay-via-ajax') }}"> Pay Now
+                                            endpoint="{{ url('/pay-via-ajax') }}" {{--onclick="numAmu()"--}}> Pay Now
                                     </button>
+                                    </form>
                                 </div>
                             </div>
 
@@ -115,12 +118,39 @@
 @section('script')
 
     <script>
+        function myFunction(){
+            var phone = $('#mobile').val();
 
-        var obj = {};
-        obj.total_amount=$('#total_amount').val();
-        obj.cus_phone=$('#mobile').val();
+            var obj = {total_amount: "" ,cus_phone:""};
 
-        $('#sslczPayBtn').prop('postdata', obj);
+            obj.total_amount=$('#total_amount').val();
+            obj.cus_phone=phone;
+
+            $('#sslczPayBtn').prop('postdata', obj);
+        }
+
+        /*function numAmu(){
+            var amu=$('#total_amount').val();
+            var num=$('#mobile').val();
+
+            $.ajax({
+                url:"/pay-via-ajax",
+                type:"post",
+                data:{
+                    num:num,
+                    amu:amu,
+                }
+            });
+        }*/
+
+       /* var obj = {total_amount: "2130" ,cus_phone:"01789339838"};
+
+
+        /!*obj.total_amount=$('#total_amount').val();
+        obj.cus_phone=$('.cus_phone').val();*!/
+
+
+        $('#sslczPayBtn').prop('postdata', obj);*/
 
 
         function updatetotal(id, price) {
